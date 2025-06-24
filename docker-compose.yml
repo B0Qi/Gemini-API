@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  gemini-openai-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.openai
+    ports:
+      - "8082:8080"
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - config.env
+    volumes:
+      # Persistent cookie storage
+      - ./gemini_cookies:/app/cookies
+      # Optional: Mount config file for easy updates
+      - ./config.env:/app/config.env:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Original API server
+  gemini-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./gemini_cookies:/usr/local/lib/python3.12/site-packages/gemini_webapi/utils/temp
+    restart: unless-stopped
+    profiles:
+      - full

@@ -202,3 +202,11 @@ Temporary Items
 
 # Temporary files
 temp/
+
+# Sensitive configuration
+config.env
+
+# Cookie storage
+gemini_cookies/
+*.cookie
+*.cookies

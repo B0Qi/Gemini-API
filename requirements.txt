@@ -1,0 +1,5 @@
+gemini-webapi
+fastapi
+uvicorn[standard]
+python-multipart
+openai  # For testing OpenAI compatibility
